@@ -1,0 +1,53 @@
+# make trimmomatic folder and open the terminal in this folder
+#transfer TruSeq3-PE.fa into trimmomatic folder, rename 6 entries for each trial
+# trimmomatic, 6 changes for every pair
+
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/raisa/C202SC19060561/raw_data/mehs_1_1.fq.gz /media/sf_Desktop/raisa/C202SC19060561/raw_data/mehs_1_2.fq.gz mehs_T1_1_trimmed_paired.fq.gz mehs_T1_1_trimmed_unpaired.fq.gz mehs_T1_2_trimmed_paired.fq.gz mehs_T1_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/josh/raw/PA_C_24_1_1.fq.gz /media/sf_Desktop/josh/raw/PA_C_24_1_2.fq.gz PA_C_24_T1_1_trimmed_paired.fq.gz PA_C_24_T1_1_trimmed_unpaired.fq.gz PA_C_24_T1_2_trimmed_paired.fq.gz PA_C_24_T1_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+
+#Get genome file from ftp.wormbase.org/pub/wormbase/releases/WS266/species/c_elegans/PRNA13758gunzip c_elegans.PRJNA13758.WS266.genomic.fa.gz 
+gunzip c_elegans.PRJNA13758.WS266.canonical_geneset.gtf.gz
+#index genome 
+bowtie2-build c_elegans.PRJNA13758.WS266.genomic.fa c_elegans.PRJNA13758.WS266_index
+bowtie2-build c_elegans.PRJNA13758.WS266.genomic.fa c_elegans.PRJNA13758.WS266.genomic
+# alternatively, you have PRNJA13758 folder from and old run, you can directly run tophat
+
+#run tophat. runtime 8-12h/sample#first create tophat folder and go to tophat folder . 
+ 
+tophat --GTF /media/sf_Desktop/raisa/C202SC19060561/PRJNA13758/c_elegans.PRJNA13758.WS266.canonical_geneset.gtf --output-dir mehs_T1 /media/sf_Desktop/raisa/C202SC19060561/PRJNA13758/c_elegans.PRJNA13758.WS266_index /media/sf_Desktop/raisa/C202SC19060561/trimmomatic/mehs_T1_1_trimmed_paired.fq.gz /media/sf_Desktop/raisa/C202SC19060561/trimmomatic/mehs_T1_2_trimmed_paired.fq.gz
+# run cufflinks. 2-3h/sample
+#go to cufflinks folder first. 
+#USE GTF file with -g (or -G) option to get rid of XLOC namescufflinks --no-update-check -g /media/sf_Desktop/raisa/C202SC19060561/PRJNA13758/c_elegans.PRJNA13758.WS266.canonical_geneset.gtf -o mehs_T1 /media/sf_Desktop/raisa/C202SC19060561/tophat/mehs_T1/accepted_hits.bam
+# run cuffmerge. 10 minutes runtime
+#The issue seems to be that I was running cuffmerge from a shared directory between the VM and the host machine. Running cuffmerge from a directory on the VM alone resolved the error.
+#make assemblies.txt and save into cuffmerge folder. This file contain the absolute path of gtf files from cufflinks for all samples# for this, create a linux cufflinks folder in the linux desktop and transfer all files here from the windows cufflinks folder 
+# bring genome.fa and gtf files into the cufflinks folder#Create cuffmerge folder in linux desktop, 
+#cd to windows cufflinks folder and 
+# run the following command.
+ls -d "$PWD"/*/transcripts.gtf > /home/manager/Desktop/cuffmerge/assemblies.txt
+# go to cuffmerge folder
+# run the following cuffmerge command . If not found, the program makes the genome index file by default.cuffmerge -g c_elegans.PRJNA13758.WS266.canonical_geneset.gtf -s c_elegans.PRJNA13758.WS266.genomic.fa assemblies.txt
+# XLOC to gene_name coversion, from cuffmerge > merged_ASM folder
+# go to cuffmerge > merged_asm folder and run the following command
+awk -F '"' -v OFS='\t' '{print $2,$8}' merged.gtf > allXLOCtoGeneNames.txt
+sort -u -k 1,1 allXLOCtoGeneNames.txt > XLOCtoGeneNames.txt
+
+# create htseq folder in the windows rnaseq folder and cd into the folder# run htseq. The "-" means read from the pipe/standard input in both samtools and htseq-count# runtime 2.5h/ sample# ignore warning: [bam_header_read] EOF marker is absent. The input is probably truncated.samtools sort -no ../tophat/mehs_T1/accepted_hits.bam sorted | samtools view - | htseq-count - --stranded=no /home/manager/Desktop/cuffmerge/merged_asm/merged.gtf > mehs_T1_genes_count.txt    
+
+# requires around 5 GB. If less memory might show error. In that case it is better to create sorted bam file for each sample using samtools sort and then run htseq-count with -r pos option
+# htseq-count -f bam -r pos /media/sf_Desktop/raisa/C202SC19060561/tophat/mehs_T1/accepted_hits.bam --stranded=no /home/manager/Desktop/cuffmerge/merged_asm/merged.gtf > mehs_T1_genes_count.txt (did not work on biolinux)
+
+#OPTIONAL# join htseq counts. in htseq folder
+join mehs_T1_genes_count.txt mehs_T2_genes_count.txt | join - mehs_T3_genes_count.txt | join - WTm_T1_genes_count.txt | join - WTm_T2_genes_count.txt | join - WTm_T3_genes_count.txt | join - WTPQ_T1_genes_count.txt | join - WTPQ_T2_genes_count.txt | join - WTPQ_T3_genes_count.txt | join - WTV_T1_genes_count.txt | join - WTV_T2_genes_count.txt | join - WTV_T3_genes_count.txt > all_gene_counts_htseq.txt
+#OPTIONAL #use the following command to add header to each column
+#sed -i '1i Row.names mehs_T1 mehs_T2 mehs_T3 WTm_T1 WTm_T2 WTm_T3 WTPQ_T1 WTPQ_T2 WTPQ_T3 WTV_T1 WTV_T2 WTV_T3' all_gene_counts_htseq.txt
+
+# copy XLOCtoGeneNames.txt from cuffmerge > merged ASM folder into htseq folder
+# make deseq2 folder
+ # install DESeq2 in rstudiosource("https://bioconductor.org/biocLite.R")biocLite("DESeq2")
+# run DE_raisa.R file in R, get DE genes names and save them text files.
+
+# Extract /PRJNA13758/annotation/c_elegans.PRJNA13758.WS266.geneIDs.txt
+cd /media/sf_Desktop/PRJNA13758/annotationgunzip -c c_elegans.PRJNA13758.WS266.geneIDs.txt.gz > c_elegans.PRJNA13758.WS266.geneIDs.txt
+
+# use the provided R file to get differentially expressed genes
