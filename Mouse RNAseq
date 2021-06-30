@@ -1,0 +1,30 @@
+The number of threads specified (-p option) should not be larger than the number of cores available in the system as a single core is only capable of running a single thread at a given momentmax memory = 3.5 GB per thread-p should total the number of cores minus 2 (to be used by OS)two processes can be run simultaneously after calculating the total memory and dividing available cores
+# STAR  
+# The pre-compiled STAR executables are located bin/ linux. 
+# The static executables are the easiest to use, as they are statically compiled and are not dependents on external libraries.# make the STAR file executable, cd to STAR # sudo chmod 755 STAR # sudo cp STAR /usr/local/bin# cd to STAR and run the following command
+/home/manager/Desktop/STAR --runMode genomeGenerate --genomeDir ./genome/index --genomeFastaFiles /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic.fna --sjdbGTFfile /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic.gtf --limitGenomeGenerateRAM 15000000000
+
+# --limitGenomeGenerateRAM 15000000000 was added to bypass 'sorting suffix array chucks....' hang
+
+# version error
+/home/manager/Downloads/STAR-2.7.4a/bin/Linux_x86_64/STAR --genomeDir ./genome/index --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/wt_T1 --readFilesIn /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T1_1_trimmed_paired.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T1_2_trimmed_paired.fq.gz
+#sent to Blair
+STAR --genomeDir ./genome/index --readFilesCommand zcat --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/wt_T1 --readFilesIn wt_T1_1_trimmed_paired.fq.gz wt_T1_2_trimmed_paired.fq.gz
+STAR --genomeDir ./genome/index --readFilesCommand zcat --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/wt_T2 --readFilesIn wt_T2_1_trimmed_paired.fq.gz wt_T2_2_trimmed_paired.fq.gz
+STAR --genomeDir ./genome/index --readFilesCommand zcat --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/wt_T3 --readFilesIn wt_T3_1_trimmed_paired.fq.gz wt_T3_2_trimmed_paired.fq.gz
+STAR --genomeDir ./genome/index --readFilesCommand zcat --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/wtINF_T1 --readFilesIn wtINF_T1_1_trimmed_paired.fq.gz wtINF_T1_2_trimmed_paired.fq.gz
+
+STAR --genomeDir ./genome/index --readFilesCommand zcat --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/wtINF_T2 --readFilesIn wtINF_T2_1_trimmed_paired.fq.gz wtINF_T2_2_trimmed_paired.fq.gz
+STAR --genomeDir ./genome/index --readFilesCommand zcat --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/wtINF_T3 --readFilesIn wtINF_T3_1_trimmed_paired.fq.gz wtINF_T3_2_trimmed_paired.fq.gz
+STAR --genomeDir ./genome/index --readFilesCommand zcat --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/atf5_T1 --readFilesIn atf5_T1_1_trimmed_paired.fq.gz atf5_T1_2_trimmed_paired.fq.gz
+
+STAR --genomeDir ./genome/index --readFilesCommand zcat --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/atf5_T2 --readFilesIn atf5_T2_1_trimmed_paired.fq.gz atf5_T2_2_trimmed_paired.fq.gz
+
+STAR --genomeDir ./genome/index --readFilesCommand zcat --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/atf5_T3 --readFilesIn atf5_T3_1_trimmed_paired.fq.gz atf5_T3_2_trimmed_paired.fq.gz
+
+STAR --genomeDir ./genome/index --readFilesCommand zcat --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/atf5INF_T1 --readFilesIn atf5INF_T1_1_trimmed_paired.fq.gz atf5INF_T1_2_trimmed_paired.fq.gz
+
+STAR --genomeDir ./genome/index --readFilesCommand zcat --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/atf5INF_T2 --readFilesIn atf5INF_T2_1_trimmed_paired.fq.gz atf5INF_T2_2_trimmed_paired.fq.gz
+
+STAR --genomeDir ./genome/index --readFilesCommand zcat --outFilterMultimapNmax 1 --twopassMode Basic --sjdbGTFfile GCF_000001635.26_GRCm38.p6_genomic.gtf --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./STAR_mapped/atf5INF_T3 --readFilesIn atf5INF_T3_1_trimmed_paired.fq.gz atf5INF_T3_2_trimmed_paired.fq.gz
+
