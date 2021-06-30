@@ -1,0 +1,29 @@
+# Extract genomic.fna.gz and genomic.gtf.gz files
+# Go to reference folder and index genome (50min)
+bowtie2-build GCF_000001635.26_GRCm38.p6_genomic.fna GCF_000001635.26_GRCm38.p6_genomic.fna# Go to reference folder and index genome (35min)
+hisat2-build GCF_000001635.26_GRCm38.p6_genomic.fna GCF_000001635.26_GRCm38.p6_genomic.fna
+
+# Align 4 min/ sample hisat2.shhisat2 --threads 14 --dta -x GCF_000001635.26_GRCm38.p6_genomic.fna -1 /home/exx/Desktop/atf5_2/trimmomatic/wt_T1_1_trimmed_paired.fq.gz -2 /home/exx/Desktop/atf5_2/trimmomatic/wt_T1_2_trimmed_paired.fq.gz > wt_T1.sam
+
+# sort 3 min/ sample samtools_sort.shsamtools sort -@ 14 -o wt_T1.bam wt_T1.sam
+
+#assemble 1.5 min/ sample stringtie.shstringtie -p 14 -G GCF_000001635.26_GRCm38.p6_genomic.gtf -o wt_T1.gtf -l wt_T1 wt_T1.bam
+
+#merge 1 min# make assemblies.txt file by incorporating location of all gtf files from last stepstringtie --merge -p 14 -G GCF_000001635.26_GRCm38.p6_genomic.gtf -o stringtie_merged.gtf assemblies.txt
+# estimate transcript abundance 2 min/sample stringtie_2.shstringtie -e -B -p 14 -G stringtie_merged.gtf -o ballgown/wt_T1.gtf wt_T1.bam
+# estimate expression count 3 min# prepare sampe_lst txt with sample ID and location of gtf file in one line sep. by spacepython prepDE.py3 -i sample_lst.txt
+
+
+
+#############  nothing worked  #####################Align 10 minhisat2 --threads 14 --dta-cufflinks -x GCF_000001635.26_GRCm38.p6_genomic.fna -1 /home/exx/Desktop/atf5_2/trimmomatic/wt_T1_1_trimmed_paired.fq.gz -2 /home/exx/Desktop/atf5_2/trimmomatic/wt_T1_2_trimmed_paired.fq.gz | samtools view -bS > wt_t1.bam
+
+# sort 25 minsamtools sort -@ 14 wt_t1.bam -o wt_t1_sorted.bam
+
+# cufflink 20 min/home/exx/Desktop/cufflinks-2.2.1.Linux_x86_64/cufflinks --no-update-check -p 14 --library-type fr-firststrand -g GCF_000001635.26_GRCm38.p6_genomic.gtf -o wt_T1 wt_t1_sorted.bam
+/home/exx/Desktop/cufflinks-2.2.1.Linux_x86_64/cufflinks --no-update-check -p 14 --library-type fr-firststrand -g GCF_000001635.26_GRCm38.p6_genomic.gtf -o wt_T2 wt_t2_sorted.bam
+
+# cuffmergels -d "$PWD"/*/transcripts.gtf > assemblies.txt
+
+# run the following cuffmerge command . If not found, the program makes the genome index file by default./home/exx/Desktop/cufflinks-2.2.1.Linux_x86_64/cuffmerge -g GCF_000001635.26_GRCm38.p6_genomic.gtf -s GCF_000001635.26_GRCm38.p6_genomic.fna assemblies.txt
+
+cuffmerge did not work because of old python requirement
