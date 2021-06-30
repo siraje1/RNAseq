@@ -26,4 +26,4 @@ hisat2-build GCF_000001635.26_GRCm38.p6_genomic.fna GCF_000001635.26_GRCm38.p6_g
 
 # run the following cuffmerge command . If not found, the program makes the genome index file by default./home/exx/Desktop/cufflinks-2.2.1.Linux_x86_64/cuffmerge -g GCF_000001635.26_GRCm38.p6_genomic.gtf -s GCF_000001635.26_GRCm38.p6_genomic.fna assemblies.txt
 
-cuffmerge did not work because of old python requirement
+cuffmerge did not work because of old python requirements
