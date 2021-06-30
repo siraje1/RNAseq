@@ -1,0 +1,71 @@
+# get latest mouse genome files from NCBI ftp using filezilla from the following ftp directory:ftp.ncbi.nlm.nih.gov
+/genomes/refseq/vertebrate_mammalian/Mus_musculus//GCF_000001635.26_GRCm38.p6/ 
+# trimmomatic# make trimmomatic folder and open the terminal in this folder
+#transfer TruSeq3-PE.fa into trimmomatic folder, rename 6 entries for each trial
+# trimmomatic, 6 changes for every pair 
+# check input file names and repeat
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/F_INF1/F_INF1_CRRA200012516-1a_HV2LYDSXX_L1_1.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/F_INF1/F_INF1_CRRA200012516-1a_HV2LYDSXX_L1_2.fq.gz wtINF_T1_1_trimmed_paired.fq.gz wtINF_T1_1_trimmed_unpaired.fq.gz wtINF_T1_2_trimmed_paired.fq.gz wtINF_T1_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+#ok
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/F_INF2/F_INF2_CRRA200012517-1a_HV2LYDSXX_L1_1.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/F_INF2/F_INF2_CRRA200012517-1a_HV2LYDSXX_L1_2.fq.gz wtINF_T2_1_trimmed_paired.fq.gz wtINF_T2_1_trimmed_unpaired.fq.gz wtINF_T2_2_trimmed_paired.fq.gz wtINF_T2_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+#ok
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/F_INF3/F_INF3_CRRA200012518-1a_HV2LYDSXX_L1_1.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/F_INF3/F_INF3_CRRA200012518-1a_HV2LYDSXX_L1_2.fq.gz wtINF_T3_1_trimmed_paired.fq.gz wtINF_T3_1_trimmed_unpaired.fq.gz wtINF_T3_2_trimmed_paired.fq.gz wtINF_T3_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+# check input files
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/F_UNT1/F_UNT1_CRRA200012513-1a_HV2LYDSXX_L1_1.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/F_UNT1/F_UNT1_CRRA200012513-1a_HV2LYDSXX_L1_2.fq.gz wt_T1_1_trimmed_paired.fq.gz wt_T1_1_trimmed_unpaired.fq.gz wt_T1_2_trimmed_paired.fq.gz wt_T1_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+#ok
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/F_UNT2/F_UNT2_CRRA200012514-1a_HV2LYDSXX_L1_1.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/F_UNT2/F_UNT2_CRRA200012514-1a_HV2LYDSXX_L1_2.fq.gz wt_T2_1_trimmed_paired.fq.gz wt_T2_1_trimmed_unpaired.fq.gz wt_T2_2_trimmed_paired.fq.gz wt_T2_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+#okjava -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/F_UNT3/F_UNT3_CRRA200012515-1a_HV2LYDSXX_L1_1.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/F_UNT3/F_UNT3_CRRA200012515-1a_HV2LYDSXX_L1_2.fq.gz wt_T3_1_trimmed_paired.fq.gz wt_T3_1_trimmed_unpaired.fq.gz wt_T3_2_trimmed_paired.fq.gz wt_T3_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+
+#ok
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/V_INF1/V_INF1_CRRA200012522-1a_HV2LYDSXX_L1_1.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/V_INF1/V_INF1_CRRA200012522-1a_HV2LYDSXX_L1_2.fq.gz atf5INF_T1_1_trimmed_paired.fq.gz atf5INF_T1_1_trimmed_unpaired.fq.gz atf5INF_T1_2_trimmed_paired.fq.gz atf5INF_T1_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+#ok
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/V_INF2/V_INF2_CRRA200012523-1a_HV2LYDSXX_L1_1.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/V_INF2/V_INF2_CRRA200012523-1a_HV2LYDSXX_L1_2.fq.gz atf5INF_T2_1_trimmed_paired.fq.gz atf5INF_T2_1_trimmed_unpaired.fq.gz atf5INF_T2_2_trimmed_paired.fq.gz atf5INF_T2_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+#ok
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/V_INF3/V_INF3_CRRA200012524-1a_HV2LYDSXX_L1_1.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/V_INF3/V_INF3_CRRA200012524-1a_HV2LYDSXX_L1_2.fq.gz atf5INF_T3_1_trimmed_paired.fq.gz atf5INF_T3_1_trimmed_unpaired.fq.gz atf5INF_T3_2_trimmed_paired.fq.gz atf5INF_T3_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+#ok
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/V_UNT1/V_UNT1_CRRA200012519-1a_HV2LYDSXX_L1_1.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/V_UNT1/V_UNT1_CRRA200012519-1a_HV2LYDSXX_L1_2.fq.gz atf5_T1_1_trimmed_paired.fq.gz atf5_T1_1_trimmed_unpaired.fq.gz atf5_T1_2_trimmed_paired.fq.gz atf5_T1_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+#ok
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/V_UNT2/V_UNT2_CRRA200012520-1a_HV2LYDSXX_L1_1.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/V_UNT2/V_UNT2_CRRA200012520-1a_HV2LYDSXX_L1_2.fq.gz atf5_T2_1_trimmed_paired.fq.gz atf5_T2_1_trimmed_unpaired.fq.gz atf5_T2_2_trimmed_paired.fq.gz atf5_T2_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+#ok
+java -jar /home/manager/Desktop/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/V_UNT3/V_UNT3_CRRA200012521-1a_HV2LYDSXX_L1_1.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/raw_data/V_UNT3/V_UNT3_CRRA200012521-1a_HV2LYDSXX_L1_2.fq.gz atf5_T3_1_trimmed_paired.fq.gz atf5_T3_1_trimmed_unpaired.fq.gz atf5_T3_2_trimmed_paired.fq.gz atf5_T3_2_trimmed_unpaired.fq.gz ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+# Extract genomic.fna.gz and genomic.gtf.gz files
+# Go to reference folder and index genome (5h)
+bowtie2-build GCF_000001635.26_GRCm38.p6_genomic.fna GCF_000001635.26_GRCm38.p6_genomic_index
+run tophat
+# first create tophat folder and go to tophat folder . 
+# This one took 38h to finish!
+tophat --GTF /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic.gtf --output-dir wt_T1 /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic_index /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T1_1_trimmed_paired.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T1_2_trimmed_paired.fq.gz
+
+# to save time, rename ref file to ..._index.fa
+# used the following
+tophat --num-threads 8 --no-coverage-search --transcriptome-index=transcriptome_data/known --GTF /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic.gtf --output-dir wt_T1 /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic_index /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T1_1_trimmed_paired.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T1_2_trimmed_paired.fq.gz
+# did not work but was enough to make the transcriptome index files used later
+#tried this one, took 31h
+tophat --transcriptome-index=transcriptome_data/known --output-dir wt_T2 /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic_index /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T2_1_trimmed_paired.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T2_2_trimmed_paired.fq.gz
+
+# tried this, took 24h
+tophat --no-novel-juncs --transcriptome-index=transcriptome_data/known --output-dir wt_T3 /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic_index /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T3_1_trimmed_paired.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T3_2_trimmed_paired.fq.gz
+tophat --num-threads 6 --no-novel-juncs --transcriptome-index=transcriptome_data/known --output-dir wt_T1 /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic_index /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T1_1_trimmed_paired.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T1_2_trimmed_paired.fq.gz
+tophat --num-threads 6 --no-novel-juncs --transcriptome-index=transcriptome_data/known --output-dir wt_T2 /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic_index /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T2_1_trimmed_paired.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T2_2_trimmed_paired.fq.gz
+# 18h --num-threads 4 resulted error
+# repeated at 5.4.20
+tophat --no-novel-juncs --transcriptome-index=transcriptome_data/known --output-dir wtINF_T1 /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic_index /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wtINF_T1_1_trimmed_paired.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wtINF_T1_2_trimmed_paired.fq.gz
+# repeat wt_T1 5.5.20 22h
+tophat --no-novel-juncs --transcriptome-index=transcriptome_data/known --output-dir wt_T1 /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic_index /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T1_1_trimmed_paired.fq.gz /media/sf_Desktop/X202SC20011640-Z01-F001/trimmomatic/wt_T1_2_trimmed_paired.fq.gz
+# cufflinks 6-14h/sample
+cufflinks --no-update-check -g /media/sf_Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_genomic.gtf -o wt_T1 /media/sf_Desktop/X202SC20011640-Z01-F001/tophat/wt_T1/accepted_hits.bam
+# run cuffmerge. 2.5h runtime
+#The issue seems to be that I was running cuffmerge from a shared directory between the VM and the host machine. Running cuffmerge from a directory on the VM alone resolved the error.
+#make assemblies.txt and save into cuffmerge folder. This file contain the absolute path of gtf files from cufflinks for all samples# for this, create a linux cufflinks folder in the linux desktop and transfer all files here from the windows cufflinks folder 
+# bring genome.fa and gtf files into the cufflinks folder#Create cuffmerge folder in linux desktop, 
+#cd to windows cufflinks folder and 
+# run the following command.
+ls -d "$PWD"/*/transcripts.gtf > /home/manager/Desktop/cuffmerge/assemblies.txt
+# go to cuffmerge folder
+# run the following cuffmerge command . If not found, the program makes the genome index file by default.
+cuffmerge -g GCF_000001635.26_GRCm38.p6_genomic.gtf -s GCF_000001635.26_GRCm38.p6_genomic_index.fa assemblies.txt
+# XLOC to gene_name coversion, from cuffmerge > merged_ASM folder
+# go to cuffmerge > merged_asm folder and run the following command
+awk -F '"' -v OFS='\t' '{print $2,$8}' merged.gtf > allXLOCtoGeneNames.txt
+sort -u -k 1,1 allXLOCtoGeneNames.txt > XLOCtoGeneNames.txt
+
+# create htseq folder in the windows rnaseq folder and cd into the folder# run htseq. The "-" means read from the pipe/standard input in both samtools and htseq-count# runtime 2.5h/ sample# ignore warning: [bam_header_read] EOF marker is absent. The input is probably truncated.samtools sort -no ../tophat/wt_T1/accepted_hits.bam sorted | samtools view - | htseq-count - --stranded=no /home/manager/Desktop/cuffmerge/merged_asm/merged.gtf > wt_T1_genes_count.txt   
