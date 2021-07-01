@@ -1,0 +1,213 @@
+# if Deseq2 not already installed
+# for newer RStudio
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#  install.packages("BiocManager")
+#BiocManager::install("DESeq2")
+
+#for older RStudio
+#source("https://bioconductor.org/biocLite.R")
+#biocLite()
+#biocLite("DESeq2")
+
+
+
+# source: https://dwheelerau.com/2014/02/17/how-to-use-deseq2-to-analyse-rnaseq-data/
+#https://www.datanovia.com/en/blog/the-a-z-of-rcolorbrewer-palette/
+
+
+directory<-'C:/Users/mahmuds/Desktop/X202SC20011640-Z01-F001_Douja/htseq'
+
+setwd("C:/Users/mahmuds/Desktop/X202SC20011640-Z01-F001_Douja/htseq")
+library("DESeq2")
+
+
+# input file names from htseq folder
+countsTable <- c('atf5_T1_genes_count.txt','atf5_T2_genes_count.txt','atf5_T3_genes_count.txt','atf5INF_T1_genes_count.txt','atf5INF_T2_genes_count.txt','atf5INF_T3_genes_count.txt','wt_T1_genes_count.txt','wt_T2_genes_count.txt','wt_T3_genes_count.txt', 'wtINF_T1_genes_count.txt','wtINF_T2_genes_count.txt', 'wtINF_T3_genes_count.txt')
+sampleNames <- c(sub("_genes_count.txt", "", countsTable))
+conds<-c(sub("_T[0-9]_genes_count.txt","", countsTable))
+
+
+#countsTable <- read.delim("all_gene_counts_htseq.txt", header=TRUE)
+#rownames(countsTable) <- countsTable$X
+#countsTable<- countsTable[,-1]
+#conds <- factor(c("E. coli","P. aeruginosa WT","P. aeruginosa fadX","P. aerugniosa gacA"))
+#cds <- newCountDataSet(countsTable,conds)
+#conds<-c('P. aeruginosa WT','P. aeruginosa WT','P. aeruginosa WT','P. aeruginosa fadX','P. aeruginosa fadX','P. aeruginosa fadX')
+sampleTable<-data.frame(SampleName=sampleNames,FileName=countsTable,condition=conds)
+ddsHTSeq<-DESeqDataSetFromHTSeqCount(sampleTable=sampleTable,directory=directory,design=~condition)                        
+dds<-ddsHTSeq[rowSums(counts(ddsHTSeq))>1,]
+dds<-DESeq(dds)
+write.table(assay(dds), file='dds.txt',sep='\t',quote=FALSE)
+
+#From Audrea
+normcounts <- counts(dds, normalized = TRUE)
+write.csv(as.data.frame(normcounts), file='normCounts.csv')
+
+
+#1 wt infected over wt 
+# the condition first will be on top
+res_wtINF_over_wt<-results(dds,contrast=c('condition','wtINF','wt'))
+#3 changes
+res_wtINF_over_wt_ordered<-res_wtINF_over_wt[order(res_wtINF_over_wt$padj),]
+#head(res_E_PA)
+#2 changes
+res_wtINF_over_wt_Sig<- subset(res_wtINF_over_wt_ordered, padj<0.05)
+conversionTable=read.table('XLOCtoGeneNames.txt',sep='\t',header=FALSE,row.names=1)
+colnames(conversionTable) = c('GeneName')
+#nameRes_PA_fadX=merge(conversionTable,as.data.frame(res_PA_fadX),by.x=0,by.y=0)
+#2change
+nameRes_wtINF_over_wt_Sig=merge(conversionTable,as.data.frame(res_wtINF_over_wt_Sig),by.x=0,by.y=0)
+#plotMA(dds,ylim=c(-20,20))
+#1 change
+setwd('C:/Users/mahmuds/Desktop/X202SC20011640-Z01-F001/deseq2')
+#write.table(nameRes_PA_fadX, file='PAfadX_PAWT48h_DEResults.txt',sep='\t',quote=FALSE)
+
+write.table(nameRes_wtINF_over_wt_Sig, file='wtINF_over_wt_Sig_DEResults.txt',sep='\t',quote=FALSE)
+
+#merge everything
+#geneIDs <- read.csv("C:/Users/mahmuds/Desktop/X202SC20011640-Z01-F001/reference/GCF_000001635.26_GRCm38.p6_feature_table.txt", header = FALSE)
+#2 changes
+merged_PA48_over_PA24_sig  <- merge(nameRes_PA48_over_PA24_Sig, geneIDs, by.x = "GeneName", by.y="V2")
+#2 changes
+write.table(merged_PA48_over_PA24_sig, file='PAWT48_over_PAWT24_Sig_DEResults.txt',sep='\t',quote=FALSE)
+
+
+#2 atf5 over wt 
+# the condition first will be on top
+#3 changes
+res_atf5_over_wt<-results(dds,contrast=c('condition','atf5','wt'))
+#3 changes
+res_atf5_over_wt_ordered<-res_atf5_over_wt[order(res_atf5_over_wt$padj),]
+#head(res_E_PA)
+#2 changes
+res_atf5_over_wt_Sig<- subset(res_atf5_over_wt_ordered, padj<0.05)
+
+setwd("C:/Users/mahmuds/Desktop/X202SC20011640-Z01-F001/htseq")
+conversionTable=read.table('XLOCtoGeneNames.txt',sep='\t',header=FALSE,row.names=1)
+colnames(conversionTable) = c('GeneName')
+#nameRes_PA_fadX=merge(conversionTable,as.data.frame(res_PA_fadX),by.x=0,by.y=0)
+
+#2change
+nameRes_atf5_over_wt_Sig=merge(conversionTable,as.data.frame(res_atf5_over_wt_Sig),by.x=0,by.y=0)
+#plotMA(dds,ylim=c(-20,20))
+#1 change
+setwd('C:/Users/mahmuds/Desktop/X202SC20011640-Z01-F001/deseq2')
+#write.table(nameRes_PA_fadX, file='PAfadX_PAWT48h_DEResults.txt',sep='\t',quote=FALSE)
+# 2 changes
+write.table(nameRes_atf5_over_wt_Sig, file='atf5_over_wt_Sig_DEResults.txt',sep='\t',quote=FALSE)
+
+#merge everything
+geneIDs <- read.csv("C:/Users/mahmuds/Desktop/PRJNA13758/annotation/c_elegans.PRJNA13758.WS266.geneIDs.txt", header = FALSE)
+#2 changes
+merged_PAV24_over_PA24_sig  <- merge(nameRes_PAV24_over_PA24_Sig, geneIDs, by.x = "GeneName", by.y="V2")
+#2 changes
+write.table(merged_PAV24_over_PA24_sig, file='PAWTV24_over_PAWT24_Sig_DEResults.txt',sep='\t',quote=FALSE)
+
+
+
+
+
+#3 atf5INF over wtINF 
+# the condition first will be on top
+res_atf5INF_over_wtINF<-results(dds,contrast=c('condition','atf5INF','wtINF'))
+#3 changes
+res_atf5INF_over_wtINF_ordered<-res_atf5INF_over_wtINF[order(res_atf5INF_over_wtINF$padj),]
+#head(res_E_PA)
+#2 changes
+res_atf5INF_over_wtINF_Sig<- subset(res_atf5INF_over_wtINF_ordered, padj<0.05)
+conversionTable=read.table('XLOCtoGeneNames.txt',sep='\t',header=FALSE,row.names=1)
+colnames(conversionTable) = c('GeneName')
+#nameRes_PA_fadX=merge(conversionTable,as.data.frame(res_PA_fadX),by.x=0,by.y=0)
+#2change
+nameRes_atf5INF_over_wtINF_Sig=merge(conversionTable,as.data.frame(res_atf5INF_over_wtINF_Sig),by.x=0,by.y=0)
+#plotMA(dds,ylim=c(-20,20))
+#1 change
+setwd('C:/Users/mahmuds/Desktop/josh/deseq2')
+#write.table(nameRes_PA_fadX, file='PAfadX_PAWT48h_DEResults.txt',sep='\t',quote=FALSE)
+#2 changes
+write.table(nameRes_atf5INF_over_wtINF_Sig, file='atf5INF_over_wtINF_Sig_DEResults.txt',sep='\t',quote=FALSE)
+
+#merge everything
+geneIDs <- read.csv("C:/Users/mahmuds/Desktop/PRJNA13758/annotation/c_elegans.PRJNA13758.WS266.geneIDs.txt", header = FALSE)
+#2 changes
+merged_PA48_over_PA24_sig  <- merge(nameRes_PA48_over_PA24_Sig, geneIDs, by.x = "GeneName", by.y="V2")
+#2 changes
+write.table(merged_PA48_over_PA24_sig, file='PAWT48_over_PAWT24_Sig_DEResults.txt',sep='\t',quote=FALSE)
+
+
+
+
+
+# heatmap
+
+rld<- rlogTransformation(dds)
+write.table(assay(rld), file='rld.txt',sep='\t',quote=FALSE)
+
+# open in excel, shift all header 1 column right, shorten names and edit the header to rename Row.names in column 1, save as excel
+
+
+#selected<- rownames(res_PA_fadX_Sig)
+
+library(readxl)
+
+# read in the log transformed count matrix
+mx<-read_excel("C:/Users/mahmuds/Desktop/rnaseq24/deseq2/rld.xlsx", sheet="rld")
+#mx<- read.table("C:/Users/mahmuds/Desktop/rnaseq24/deseq2/rld.txt", row.names=NULL)
+
+# chenge any column header #names(mx)[1]<- "Row.names"
+#read in the DESeq DGE spreadsheet
+dge <- read_excel("C:/Users/mahmuds/Desktop/rnaseq24/deseq2/PAfadX_PAWT_24hSig_DEResults.xlsx", sheet= "PAfadX_PAWT_24hSig_DEResults")
+
+#merge the counts onto the DGE spreadsheet. Column header Row.names must be present in both count table and DGE spreadsheet
+mg<-merge(dge,mx,by="Row.names")
+
+#sort the merged table by fold change. add - before variable to indicate DESCENDING oder, default is ascending
+smg<-mg[order(-mg$`log2FoldChange`), ]
+
+#select only the columns containing the gene names and count data
+x<-subset(smg, select = c("Row.names", "PAWT_T1", "PAWT_T2", "PAWT_T3", "fadX_T1", "fadX_T2", "fadX_T3"))
+x <- x[, -1]
+
+
+#draw heatmap 
+heatmap(as.matrix (x))
+
+#key1 <- read.csv("cATF5_correlated_Genes_Space.csv")
+#query1 <- read.csv("rlogCounts_Ofav_Procb_adjust.csv")
+#merge1 <- inner_join(key1,query1, by = "xloc")
+#write.csv(merge1, file = "Annotated_counts.csv")
+
+
+#key <- read.csv("rlogCounts_Ofav_Procb.csv")
+#query <- read.csv("mt_xlocs.csv")
+#merge <- inner_join(key,query, by = "xloc")
+
+#write.csv(merge, file = "mtgenes_counts.csv")
+library(vegan)
+library(gplots)
+library(Heatplus)
+library(dplyr)
+library(pheatmap)
+library(viridis)
+library(RColorBrewer)
+library(dendsort)
+
+scaleyellowred <- colorRampPalette(c("lightyellow", "red"), space = "rgb")(100)
+heatmap(as.matrix(x), Rowv = NA, Colv = NA, margins = c(10,1))
+
+data.dist <- vegdist(x, method = "bray")
+
+row.clus <- hclust(data.dist, "aver")
+
+
+
+data.dist.g <- vegdist(t(x), method = "bray")
+
+col.clus <- hclust(data.dist.g, "aver")
+
+heatmap.2(as.matrix(x), scale= "row", margins = c(11,5),  trace = "none", density.info = "none", lhei = c(2, 7))
+# add in heatmap.2: col=brewer.pal(100,"RdBu"), to have three color effect
+# add: colfunc <-colorRampPalette(c("black", "white", "red"))
+# then add in heatmap.2: col=colfunc(1000), to have three customised colors
+
+
