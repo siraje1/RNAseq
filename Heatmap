@@ -1,0 +1,80 @@
+# cluster reordering
+# https://cran.r-project.org/web/packages/pheatmap/pheatmap.pdf
+
+library("DESeq2")
+
+directory<-'C:/Users/mahmuds/Desktop/X202SC20011640-Z01-F001_Douja/htseq'
+
+setwd("C:/Users/mahmuds/Desktop/X202SC20011640-Z01-F001_Douja/htseq")
+
+countsTable <- c('atf5_T1_genes_count.txt','atf5_T2_genes_count.txt','atf5_T3_genes_count.txt','atf5INF_T1_genes_count.txt','atf5INF_T2_genes_count.txt','atf5INF_T3_genes_count.txt','wt_T1_genes_count.txt','wt_T2_genes_count.txt','wt_T3_genes_count.txt', 'wtINF_T1_genes_count.txt','wtINF_T2_genes_count.txt', 'wtINF_T3_genes_count.txt')
+sampleNames <- c(sub("_genes_count.txt", "", countsTable))
+conds<-c(sub("_T[0-9]_genes_count.txt","", countsTable))
+
+sampleTable<-data.frame(SampleName=sampleNames,FileName=countsTable,condition=conds)
+ddsHTSeq<-DESeqDataSetFromHTSeqCount(sampleTable=sampleTable,directory=directory,design=~condition)                        
+dds<-ddsHTSeq[rowSums(counts(ddsHTSeq))>1,]
+dds<-DESeq(dds)
+write.table(assay(dds), file='dds.txt',sep='\t',quote=FALSE)
+rld<- rlogTransformation(dds)
+write.table(assay(rld), file='rld.txt',sep='\t',quote=FALSE)
+# open rld.txt in excel and edit the header to rename Row.names in column 1, save as excel
+
+
+library(readxl)
+mx<-read_excel("C:/Users/mahmuds/Desktop/X202SC20011640-Z01-F001_Douja/htseq/rld.xlsx", sheet="rld")
+#mx<- read.table("C:/Users/mahmuds/Desktop/rnaseq24/deseq2/rld.txt", row.names=NULL)
+
+# chenge any column header #names(mx)[1]<- "Row.names"
+#read in the DESeq DGE spreadsheet
+dge <- read_excel("C:/Users/mahmuds/Desktop/X202SC20011640-Z01-F001_Douja/deseq2/atf5_over_wt_Sig_DEResults.xlsx", sheet= "atf5_over_wt_Sig_DEResults")
+
+#merge the counts onto the DGE spreadsheet. Column header Row.names must be present in both count table and DGE spreadsheet
+mg<-merge(dge,mx,by="Row.names")
+
+#sort the merged table by fold change. add - before variable to indicate DESCENDING oder, default is ascending
+smg<-mg[order(-mg$`log2FoldChange`), ]
+
+#select only the columns containing the gene names and count data
+x<-subset(smg, select = c("wt_T1", "wt_T2", "wt_T3", "atf5_T1", "atf5_T2", "atf5_T3"))
+#x <- x[, -1]
+
+#x<-subset(smg, select = c("Row.names", "PAWT_T1_genes_count.txt", "PAWT_T2_genes_count.txt", "PAWT_T3_genes_count.txt", "fadX_T1_genes_count.txt", "fadX_T2_genes_count.txt", "fadX_T3_genes_count.txt"))
+
+callback = function(hc, mat){
+  sv = svd(t(mat))$v[,1]
+  dend = reorder(as.dendrogram(hc), wts = sv)
+  as.hclust(dend)
+}
+
+library(pheatmap)
+pheatmap(x, scale="row", show_rownames=FALSE, clustering_callback = callback)
+
+
+
+
+# did not use this
+cal_z_score <- function(x){
+  (x - mean(x)) / sd(x)
+}
+
+data_subset_norm <- t(apply(x, 1, cal_z_score))
+library(pheatmap)
+library(viridis)
+
+pheatmap(
+  clustering_callback = callback,
+  mat               = data_subset_norm,
+  border_color      = FALSE,
+  color             = viridis(100), 
+  cellwidth         = NA,
+  show_colnames     = TRUE,
+  show_rownames     = FALSE,
+  cluster_cols      = TRUE,
+  drop_levels       = TRUE,
+  cluster_rows      = TRUE,
+  fontsize          = 7,
+  
+)
+
+
